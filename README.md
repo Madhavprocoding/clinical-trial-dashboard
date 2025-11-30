@@ -143,7 +143,7 @@ Customize if needed
 
 👨‍💻 Author
 
-Your Madhav Ramesh Kanchewad
+Madhav Ramesh Kanchewad
 Aspiring Data Analyst | Power BI Developer
 
 ⭐ Support
