@@ -1,10 +1,35 @@
-Project Title: Clinical Trial Enrollment & Patient Compliance Dashboard
+📊 Clinical Trial Enrollment & Patient Compliance Dashboard
 
-Objective:
-The goal of this project is to analyze site-wise enrollment performance and patient visit compliance in an ongoing clinical trial. The dashboard helps track how many patients were enrolled, how they were distributed across different clinical sites, and how well they followed their visit schedules.
+A Power BI dashboard that analyzes patient enrollment, site performance, and visit compliance trends in a clinical trial setting.
 
-Data Used:
-The project uses 5 tables:
+🚀 Project Overview
+
+This project provides a clear and interactive view of clinical trial progress by tracking:
+
+Patient enrollment across trial sites
+
+Site-wise recruitment performance
+
+Patient visit compliance (completed vs missed visits)
+
+Dropout details and overall progress
+
+The dashboard helps trial managers monitor performance in real-time and take corrective actions where needed.
+
+📁 Project Structure
+
+clinical-trial-dashboard/
+│
+├── Clinical_Trial_Dashboard.pbix        # Power BI Dashboard File
+├── README.md                             # Project Documentation (This file)
+└── /screenshots                          # Optional screenshots for clarity
+
+
+📐 Data Model
+
+The project uses a Star Schema that includes:
+
+Dimension Tables
 
 Dim_Site
 
@@ -12,28 +37,60 @@ Dim_Patient
 
 Dim_Date
 
+Fact Tables
+
 Fact_Patient_Enrollment
 
 Fact_Patient_Visits
 
-Data Model:
-A star schema was created with Fact tables in the center and Dimension tables linked using key fields like Site_ID, Patient_ID, and Date. This model helps to create accurate measures and visuals.
+Relationships are created using keys like:
+Site_ID, Patient_ID, and date fields.
 
-Key Calculations (DAX Measures):
-The following measures were created:
+🧮 DAX Measures Used
+Enrollment Metrics
+Total Enrolled Patients =
+CALCULATE (
+    COUNTROWS ( Fact_Patient_Enrollment ),
+    Fact_Patient_Enrollment[Status] = "Enrolled"
+)
 
-Total Enrolled Patients – Count of patients marked as “Enrolled”
+Recruitment Target % =
+DIVIDE (
+    [Total Enrolled Patients],
+    SUM ( Dim_Site[Enrollment_Target] )
+)
 
-Recruitment Target % – Percentage of target reached by each site
+Compliance Metrics
+Patient Compliance Rate :=
+VAR CompletedVisits =
+    COUNTROWS (
+        FILTER (
+            Fact_Patient_Visits,
+            Fact_Patient_Visits[Visit_Statu] = "Completed"
+        )
+    )
+VAR MissedVisits =
+    COUNTROWS (
+        FILTER (
+            Fact_Patient_Visits,
+            Fact_Patient_Visits[Visit_Statu] = "Missed"
+        )
+    )
+RETURN
+DIVIDE ( CompletedVisits, CompletedVisits + MissedVisits )
 
-Patient Compliance Rate – Completed visits vs. missed visits
+Dropout Metrics
+Dropout Rate :=
+VAR WithdrawnPatients =
+    CALCULATE (
+        COUNTROWS ( Fact_Patient_Enrollment ),
+        Fact_Patient_Enrollment[Status] = "Withdrew"
+    )
+RETURN
+DIVIDE ( WithdrawnPatients, [Total Enrolled Patients] + WithdrawnPatients )
 
-Dropout Rate – Patients who withdrew from the study
-
-Dashboard Visuals:
-The main report page contains:
-
-Three KPI Cards
+📊 Dashboard Features
+1️⃣ KPI Summary Cards
 
 Total Enrolled Patients
 
@@ -41,19 +98,54 @@ Recruitment Target %
 
 Patient Compliance Rate
 
-Bar Chart: Shows site-wise enrollment numbers
+2️⃣ Site-Wise Enrollment Chart
 
-Slicer: Allows filtering dashboard by individual clinical sites
+A bar chart showing enrollment distribution across trial sites.
 
-Insights:
+3️⃣ Interactive Slicer
 
-Shows how many patients were enrolled at each site
+Filter all visuals by site to compare performance instantly.
 
-Helps identify which sites are performing well or slow
+Example:
 
-Displays patient visit compliance (how many patients follow their schedule)
+<img width="1920" height="1080" alt="Screenshot 2025-11-30 220352" src="https://github.com/user-attachments/assets/749a5d55-4dcd-4626-8872-e01fbf0f73dd" />
 
-Helps clinical teams track recruitment progress and take action if targets are not met
 
-Conclusion:
-This dashboard provides a clear and simple view of clinical trial progress. It helps decision-makers monitor enrollment, track patient behavior, and improve site performance.
+📝 Insights From Dashboard
+
+Shows overall patient enrollment and progress against recruitment targets
+
+Highlights top and low-performing sites
+
+Helps understand patient adherence and missed visits
+
+Supports decision-making to improve site performance and compliance
+
+🛠 Tech Used
+
+Power BI Desktop
+
+DAX (Data Analysis Expressions)
+
+Star Schema Modeling
+
+Excel Data Source (Mock Data)
+
+📥 How to Use this Project
+
+Download the .pbix file
+
+Open it in Power BI Desktop
+
+Interact with slicers, visuals, and metrics
+
+Customize if needed
+
+👨‍💻 Author
+
+Your Madhav Ramesh Kanchewad
+Aspiring Data Analyst | Power BI Developer
+
+⭐ Support
+
+If you like this project, consider giving the repository a star ⭐ on GitHub.
